@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920">
+  <title>Aniversariantes do Mês — The Deed Hunter World</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: #000000;
+      background-image:
+        radial-gradient(ellipse at 50% 40%, #1f0d00 0%, #0a0500 45%, #000000 70%),
+        radial-gradient(ellipse at 80% 80%, #100800 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 20%, #150900 0%, transparent 55%);
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 80px 22px;
+      position: relative;
+    }
+
+    /* ── Floating diamonds ── */
+    .diamond {
+      position: absolute;
+      transform: rotate(45deg);
+      opacity: 0.18;
+      pointer-events: none;
+    }
+    .dot-accent {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.22;
+      pointer-events: none;
+    }
+
+    /* ── TOP SECTION ── */
+    .top-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    /* Brand logo row */
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 2px;
+    }
+    .brand-hat {
+      font-size: 20px;
+      filter: sepia(1) saturate(2) hue-rotate(-10deg) brightness(1.1);
+    }
+    .brand-name {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 6px;
+      background: linear-gradient(90deg, #a07830, #C9A84C, #e8c96a, #C9A84C, #a07830);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-transform: uppercase;
+      text-shadow: none;
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 7px;
+      color: #666;
+      text-transform: uppercase;
+    }
+
+    /* Balloons row */
+    .balloons-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 14px;
+      margin: 6px 0 4px;
+    }
+
+    /* Month + Year row */
+    .month-row {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      line-height: 1;
+    }
+    .month-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 148px;
+      line-height: 0.9;
+      background: linear-gradient(135deg, #ff3cac 0%, #ff6a00 35%, #ff8c00 60%, #ffcc00 85%, #ffd700 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(255, 140, 0, 0.25));
+      letter-spacing: 4px;
+    }
+    .year-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 72px;
+      color: #444;
+      letter-spacing: 3px;
+      line-height: 1;
+      padding-bottom: 12px;
+    }
+
+    /* Subtitle */
+    .subtitle {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      letter-spacing: 10px;
+      color: #888;
+      text-transform: uppercase;
+    }
+    .subtitle .highlight {
+      color: #ffcc00;
+      font-weight: 700;
+    }
+
+    /* ── CARDS SECTION ── */
+    .cards-row {
+      display: flex;
+      gap: 28px;
+      justify-content: center;
+      align-items: stretch;
+      width: 100%;
+      flex: 1;
+      margin: 12px 0 8px;
+    }
+
+    .card {
+      background: rgba(20, 14, 8, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      padding: 28px 22px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      max-width: 390px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    /* Subtle inner glow per accent */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      border-radius: 18px 18px 0 0;
+      background: var(--accent);
+      opacity: 0.7;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 18px;
+      background: radial-gradient(ellipse at 50% 0%, var(--accent-dim) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* Calendar widget */
+    .calendar {
+      background: #fff;
+      border-radius: 13px;
+      width: 140px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .cal-header {
+      background: var(--accent);
+      color: #fff;
+      text-align: center;
+      padding: 7px 0 5px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+    .cal-body {
+      padding: 4px 0 8px;
+      text-align: center;
+    }
+    .cal-day {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 68px;
+      font-weight: 900;
+      color: #111;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+    .cal-weekday {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      color: #888;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* Colored dots */
+    .dots {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .dot:nth-child(2) { opacity: 0.55; transform: scale(0.8); }
+    .dot:nth-child(3) { opacity: 0.3; transform: scale(0.65); }
+
+    /* Person name */
+    .person-name {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 20px;
+      letter-spacing: 2.5px;
+      color: #fff;
+      text-align: center;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    /* Birthday button */
+    .birthday-btn {
+      border: 1.5px solid var(--accent);
+      background: var(--accent-dim);
+      color: var(--accent);
+      letter-spacing: 3px;
+      font-size: 10px;
+      padding: 9px 22px;
+      border-radius: 7px;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
+      text-transform: uppercase;
+      cursor: default;
+      box-shadow: 0 0 12px var(--accent-glow);
+      white-space: nowrap;
+    }
+
+    /* Card accent variables */
+    .card-1 { --accent: #ff3cac; --accent-dim: rgba(255,60,172,0.08); --accent-glow: rgba(255,60,172,0.2); }
+    .card-2 { --accent: #e6c84a; --accent-dim: rgba(230,200,74,0.08); --accent-glow: rgba(230,200,74,0.2); }
+    .card-3 { --accent: #8b5cf6; --accent-dim: rgba(139,92,246,0.08); --accent-glow: rgba(139,92,246,0.2); }
+    .card-4 { --accent: #22d3ee; --accent-dim: rgba(34,211,238,0.08); --accent-glow: rgba(34,211,238,0.2); }
+
+    /* ── BOTTOM BANNER ── */
+    .bottom-banner {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 100px;
+      padding: 13px 52px;
+      text-align: center;
+      width: auto;
+      max-width: 900px;
+    }
+    .bottom-banner p {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 15px;
+      color: #ccc;
+      letter-spacing: 1px;
+    }
+    .bottom-banner .heart { color: #ff3cac; font-weight: 700; }
+    .bottom-banner .brand-inline {
+      font-weight: 700;
+      background: linear-gradient(90deg, #a07830, #C9A84C, #e8c96a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #444;
+      text-align: center;
+    }
+    .footer .gold { color: #C9A84C; }
+    .footer .sep { color: #2a2a2a; margin: 0 14px; }
+
+    /* ── BALLOONS ── */
+    .balloon-wrap {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .balloon-string {
+      width: 1.5px;
+      height: 28px;
+      background: rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ FLOATING DIAMONDS ══ -->
+  <div class="diamond" style="width:22px;height:22px;background:#ff3cac;top:68px;left:155px;"></div>
+  <div class="diamond" style="width:14px;height:14px;background:#ff8c00;top:195px;left:220px;opacity:0.14;"></div>
+  <div class="diamond" style="width:18px;height:18px;background:#8b5cf6;top:420px;left:90px;"></div>
+  <div class="diamond" style="width:10px;height:10px;background:#22d3ee;top:700px;left:170px;opacity:0.15;"></div>
+  <div class="diamond" style="width:26px;height:26px;background:#e6c84a;top:820px;left:120px;opacity:0.13;"></div>
+  <div class="diamond" style="width:16px;height:16px;background:#ff3cac;top:960px;left:260px;opacity:0.16;"></div>
+
+  <div class="diamond" style="width:20px;height:20px;background:#22d3ee;top:55px;right:148px;"></div>
+  <div class="diamond" style="width:12px;height:12px;background:#ff3cac;top:190px;right:225px;opacity:0.13;"></div>
+  <div class="diamond" style="width:24px;height:24px;background:#e6c84a;top:400px;right:80px;opacity:0.15;"></div>
+  <div class="diamond" style="width:16px;height:16px;background:#8b5cf6;top:680px;right:165px;"></div>
+  <div class="diamond" style="width:12px;height:12px;background:#ff8c00;top:850px;right:240px;opacity:0.14;"></div>
+  <div class="diamond" style="width:20px;height:20px;background:#22d3ee;top:960px;right:130px;opacity:0.12;"></div>
+  <div class="diamond" style="width:8px;height:8px;background:#fff;top:300px;left:480px;opacity:0.08;"></div>
+  <div class="diamond" style="width:8px;height:8px;background:#fff;top:740px;right:490px;opacity:0.08;"></div>
+
+  <!-- ══ DOT ACCENTS ══ -->
+  <div class="dot-accent" style="width:6px;height:6px;background:#ff3cac;top:140px;left:340px;"></div>
+  <div class="dot-accent" style="width:5px;height:5px;background:#ffcc00;top:310px;left:400px;"></div>
+  <div class="dot-accent" style="width:7px;height:7px;background:#22d3ee;top:560px;left:300px;"></div>
+  <div class="dot-accent" style="width:5px;height:5px;background:#8b5cf6;top:880px;left:380px;"></div>
+  <div class="dot-accent" style="width:6px;height:6px;background:#ff8c00;top:140px;right:340px;"></div>
+  <div class="dot-accent" style="width:5px;height:5px;background:#e6c84a;top:310px;right:400px;"></div>
+  <div class="dot-accent" style="width:7px;height:7px;background:#ff3cac;top:560px;right:305px;"></div>
+  <div class="dot-accent" style="width:5px;height:5px;background:#22d3ee;top:875px;right:375px;"></div>
+
+  <!-- ══ TOP SECTION ══ -->
+  <div class="top-section">
+
+    <!-- Brand logo -->
+    <div class="brand-logo">
+      <span class="brand-hat">🎩</span>
+      <span class="brand-name">The Deed Hunter World</span>
+      <span class="brand-hat">🎩</span>
+    </div>
+
+    <!-- Section label -->
+    <div class="section-label">— Aniversariantes do Mês —</div>
+
+    <!-- Balloons -->
+    <div class="balloons-row">
+      <!-- Balloon 1: Pink -->
+      <div class="balloon-wrap">
+        <svg width="52" height="64" viewBox="0 0 52 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="26" cy="28" rx="22" ry="26" fill="#ff3cac"/>
+          <ellipse cx="18" cy="17" rx="7" ry="5" fill="rgba(255,255,255,0.18)" transform="rotate(-25 18 17)"/>
+          <path d="M26 54 Q24 58 26 62 Q28 58 26 54Z" fill="#ff3cac" opacity="0.7"/>
+          <line x1="26" y1="54" x2="26" y2="64" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <!-- Balloon 2: Orange -->
+      <div class="balloon-wrap">
+        <svg width="48" height="60" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="24" cy="26" rx="20" ry="24" fill="#ff8c00"/>
+          <ellipse cx="17" cy="16" rx="6" ry="4" fill="rgba(255,255,255,0.18)" transform="rotate(-20 17 16)"/>
+          <path d="M24 50 Q22 54 24 58 Q26 54 24 50Z" fill="#ff8c00" opacity="0.7"/>
+          <line x1="24" y1="50" x2="24" y2="60" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <!-- Balloon 3: Purple -->
+      <div class="balloon-wrap">
+        <svg width="56" height="68" viewBox="0 0 56 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="28" cy="30" rx="24" ry="28" fill="#8b5cf6"/>
+          <ellipse cx="19" cy="18" rx="8" ry="5.5" fill="rgba(255,255,255,0.18)" transform="rotate(-25 19 18)"/>
+          <path d="M28 58 Q26 63 28 67 Q30 63 28 58Z" fill="#8b5cf6" opacity="0.7"/>
+          <line x1="28" y1="58" x2="28" y2="68" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <!-- Balloon 4: Cyan/Teal -->
+      <div class="balloon-wrap">
+        <svg width="50" height="62" viewBox="0 0 50 62" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="25" cy="27" rx="21" ry="25" fill="#22d3ee"/>
+          <ellipse cx="17" cy="16" rx="7" ry="4.5" fill="rgba(255,255,255,0.18)" transform="rotate(-22 17 16)"/>
+          <path d="M25 52 Q23 57 25 61 Q27 57 25 52Z" fill="#22d3ee" opacity="0.7"/>
+          <line x1="25" y1="52" x2="25" y2="62" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Month + Year -->
+    <div class="month-row">
+      <span class="month-title">ABRIL</span>
+      <span class="year-title">2026</span>
+    </div>
+
+    <!-- Subtitle -->
+    <div class="subtitle">Celebrando &nbsp;<span class="highlight">Quem Faz</span>&nbsp; Acontecer</div>
+
+  </div>
+
+  <!-- ══ CARDS ROW ══ -->
+  <div class="cards-row">
+
+    <!-- Card 1: Cassio Gomes — Dia 05, Domingo, Pink -->
+    <div class="card card-1">
+      <div class="calendar">
+        <div class="cal-header">Abril</div>
+        <div class="cal-body">
+          <div class="cal-day">05</div>
+          <div class="cal-weekday">Domingo</div>
+        </div>
+      </div>
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="person-name">Cassio Gomes</div>
+      <div class="birthday-btn">🎂 Feliz Aniversário</div>
+    </div>
+
+    <!-- Card 2: Felippe Casarim — Dia 13, Segunda, Gold -->
+    <div class="card card-2">
+      <div class="calendar">
+        <div class="cal-header">Abril</div>
+        <div class="cal-body">
+          <div class="cal-day">13</div>
+          <div class="cal-weekday">Segunda</div>
+        </div>
+      </div>
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="person-name">Felippe Casarim</div>
+      <div class="birthday-btn">🎂 Feliz Aniversário</div>
+    </div>
+
+    <!-- Card 3: Gabriel Quesada — Dia 21, Terça, Purple -->
+    <div class="card card-3">
+      <div class="calendar">
+        <div class="cal-header">Abril</div>
+        <div class="cal-body">
+          <div class="cal-day">21</div>
+          <div class="cal-weekday">Terça</div>
+        </div>
+      </div>
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="person-name">Gabriel Quesada</div>
+      <div class="birthday-btn">🎂 Feliz Aniversário</div>
+    </div>
+
+    <!-- Card 4: Jobson Crisostomo — Dia 21, Terça, Cyan -->
+    <div class="card card-4">
+      <div class="calendar">
+        <div class="cal-header">Abril</div>
+        <div class="cal-body">
+          <div class="cal-day">21</div>
+          <div class="cal-weekday">Terça</div>
+        </div>
+      </div>
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="person-name">Jobson Crisostomo</div>
+      <div class="birthday-btn">🎂 Feliz Aniversário</div>
+    </div>
+
+  </div>
+
+  <!-- ══ BOTTOM BANNER ══ -->
+  <div class="bottom-banner">
+    <p>
+      Que este novo ciclo seja repleto de conquistas
+      <span class="heart">&nbsp;♥&nbsp;</span>
+      vida longa aos Hunters &nbsp;·&nbsp;
+      <span class="brand-inline">The Deed Hunter World</span>
+    </p>
+  </div>
+
+  <!-- ══ FOOTER ══ -->
+  <div class="footer">
+    <span class="gold">The Deed Hunter World</span>
+    <span class="sep">◆</span>
+    <span>Aniversariantes</span>
+    <span class="sep">◆</span>
+    <span>Abril 2026</span>
+  </div>
+
+</body>
+</html>
